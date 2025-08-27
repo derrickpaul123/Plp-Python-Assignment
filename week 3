@@ -1,0 +1,42 @@
+#
+# This script defines a function to calculate a discounted price
+# and then uses that function to get user input and display the result.
+#
+
+def calculate_discount(price, discount_percent):
+   
+    # Check if the discount is 20% or higher.
+    if discount_percent >= 20:
+        # Calculate the discount amount.
+        discount_amount = price * (discount_percent / 100)
+        # Calculate and return the final price.
+        final_price = price - discount_amount
+        return final_price
+    else:
+        # If the discount is less than 20%, return the original price.
+        return price
+
+# --- Main part of the program ---
+
+# Prompt the user for the original price and convert it to a float.
+try:
+    original_price = float(input("Enter the original price of the item: "))
+    # Prompt the user for the discount percentage and convert it to a float.
+    discount = float(input("Enter the discount percentage: "))
+
+    # Call the function to get the final price.
+    final_price = calculate_discount(original_price, discount)
+
+    # Check if a discount was applied.
+    if final_price != original_price:
+        print(f"\nOriginal Price: ${original_price:.2f}")
+        print(f"Discount Applied: {discount:.2f}%")
+        print(f"Final Price: ${final_price:.2f}")
+    else:
+        # If no discount was applied.
+        print(f"\nNo discount was applied because the discount was less than 20%.")
+        print(f"Original Price: ${original_price:.2f}")
+
+except ValueError:
+    # Handle cases where the user enters non-numeric input.
+    print("\nInvalid input. Please enter a valid number for the price and discount.")
