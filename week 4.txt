@@ -1,0 +1,66 @@
+import os
+import datetime
+
+def main():
+    """
+    Main function to handle the file reading, modification, and writing process.
+    It includes error handling to ensure the program doesn't crash.
+    """
+    # This loop will continue to prompt the user until a valid filename is entered.
+    while True:
+        # Prompt the user to enter the name of the file they want to read.
+        source_filename = input("Please enter the name of the file to read (e.g., my_document.txt): ")
+        
+        # Check if the filename is an empty string. If so, prompt again.
+        if not source_filename:
+            print("Filename cannot be empty. Please try again.")
+            continue
+
+        # A try-except block is used for error handling, specifically for file operations.
+        try:
+            # 1. READ the entire content of the source file.
+            # 'with open(...)' is the best practice as it automatically closes the file.
+            with open(source_filename, 'r', encoding='utf-8') as file:
+                original_content = file.read()
+                print(f"Successfully read from '{source_filename}'.")
+            
+            # 2. MODIFY the content.
+            # This example adds a header and converts the original text to uppercase.
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            modified_content = (
+                f"--- MODIFIED CONTENT ({timestamp}) ---\n\n"
+                f"{original_content.upper()}\n\n"
+                "------------------------------------"
+            )
+
+            # 3. WRITE the modified content to a new file.
+            # We create a new filename to avoid overwriting the original file.
+            base_name, extension = os.path.splitext(source_filename)
+            destination_filename = f"{base_name}_modified{extension}"
+
+            with open(destination_filename, 'w', encoding='utf-8') as file:
+                file.write(modified_content)
+                print(f"Successfully wrote the modified content to '{destination_filename}'.")
+            
+            # If all operations are successful, we can exit the loop.
+            break
+
+        # 🧪 ERROR HANDLING LAB:
+        # Catch a specific error: FileNotFoundError.
+        # This occurs if the user enters a filename that does not exist.
+        except FileNotFoundError:
+            print(f"Error: The file '{source_filename}' was not found.")
+            print("Please check the filename and try again.\n")
+        
+        # Catch a more general IOError.
+        # This could occur if the program lacks the permissions to read the file.
+        except IOError:
+            print(f"Error: An IOError occurred while trying to read '{source_filename}'.")
+            print("Please ensure the file is not corrupted and you have read permissions.\n")
+        
+        # Catch any other unexpected exception.
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}\n")
+
+if __name__ == "__main__":
+    main()
